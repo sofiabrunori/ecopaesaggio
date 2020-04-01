@@ -45,4 +45,37 @@ covid <- read.table("covid_agg.csv", head=T)
  points(covids, pch=19)
  #aggiungiamo anche i bordi di dove si collocano i paesi come range di lat e lon
  #c'è un database internazionale che li ha già inseriri
- 
+ ## recupero i dati di ieri che si trovano nella cartella lab_eco
+setwd("C:/lab_eco")
+load("pointpattern.RData")
+# per vedere i dati presenti salvati nelle varie sessioni si lavoro su r
+ls()
+#dobbiamo ridire quale libreria useremo
+library(spatstat)
+#plottiamo di nuovo la mappa di ieri
+plot(d)
+#cambiamo i colori della mappa in modo arbitrario con la funzione palette 
+# associo una sigla alla mia palette e inserisco l'array dei colori
+cl<- colorRampPalette(c('yellow', 'orange', 'red'))
+# posso anche inserire quante gradazioni usare per rendere + precisa la mappa
+cl<- colorRampPalette(c('yellow', 'orange', 'red')) (100)
+plot(d, col=cl)
+#### esercizio : plot mappa della densità dal verde al blu
+cl<- colorRampPalette(c('green', 'violet', 'blue')) (200)
+plot(d, col=cl)
+#aggiungiamo ora i punti che avevamo ieri
+points(covids)
+#ora aggiungiamo anche i confini degli stati con le coordinate, questo dato è esterno
+coastlines<-readOGR("ne_10m_coastline.shp")
+# mi da un errore perchè ho messo red OGR(legge file vettoriali) senza aver prima installato la librereria giusta quindi bisogna installarla
+install.packages("rgdal")
+library(rgdal)
+#ora posso richiamare il comando che prima non aveva funzionato e plottarlo
+coastlines<-readOGR("ne_10m_coastline.shp")
+plot(coastlines, add=T)
+
+## esercizio: plot della mappa di densità con nuovi colori e aggiunta delle coast lines 
+cl<- colorRampPalette(c('green', 'violet', 'blue')) (200)
+plot(d, col=cl)
+coastlines<-readOGR("ne_10m_coastline.shp")
+plot(coastlines, add=T)
