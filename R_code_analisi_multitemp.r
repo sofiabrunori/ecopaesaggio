@@ -74,6 +74,53 @@ before <- c( 10.04155,89.95845)
 after  <- c(179515, 163211)
 output <- data.frame(cover,before,after) #abbiamo creato un dataframe 
 View(output) # vediamo una tabella 
+#### 5/05
+# apriamo la cartella di lavoro giusta e carichiamo il dataset che avevamo creato la scorsa lezione
+setwd("C:/lab_eco/")
+load("defor.RData")
+ls()
+library(raster)
+par(mfrow=c(1,2)) #fare un plot coni due anni a confronto dell altra volta
+cl <- colorRampPalette(c('black','green'))(100) # 
+plot(d1c$map, col=cl)
+plot(d2c$map, col=cl)
+#creare un output cioè un dataframe con il tipo di landcover, la percentuale prima e dopo il disposcamento
+cover <- c("Agriculture","Forest")
+before <- c(10.9,89.1)
+after <- c(48.2,51.8)
+output #vedo la tabellina che ho creato la volta scorsa
+#facciamo un plot dove si vedono le percentuali a confronto con ggplot della deforestazione
+library(ggplot2)
+ggplot(output, aes(x=cover, y=before, color=cover)) +
+geom_bar(stat="identity", fill="white")
+# stessa cosa ma dopo la deforestazione 
+ggplot(output, aes(x=cover, y=after, color=cover)) +
+geom_bar(stat="identity", fill="white")
+# facciamo un plot di entrampi insieme, instaliamo un altro paccheto perchè la funz. par non funziona con ggplot
+install.packages("gridExtra")
+library(gridExtra)
+#la funzione che lo permette è grid.arrange e in pratica prende i vari plot e li mette nello stesso grafico
+# si assegna un nome al precedente ggplot
+grafico1<-ggplot(output, aes(x=cover, y=before, color=cover)) +
+geom_bar(stat="identity", fill="white")
+grafico2<- ggplot(output, aes(x=cover, y=after, color=cover)) +
+geom_bar(stat="identity", fill="white")
+grid.arrange(grafico1, grafico2, nrow=1) #se ometto nrow me li mette uno sotto l'altro
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
