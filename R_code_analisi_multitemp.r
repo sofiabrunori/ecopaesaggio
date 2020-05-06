@@ -107,10 +107,28 @@ grafico2<- ggplot(output, aes(x=cover, y=after, color=cover)) +
 geom_bar(stat="identity", fill="white")
 grid.arrange(grafico1, grafico2, nrow=1) #se ometto nrow me li mette uno sotto l'altro
 
-
-
-
-
+## modifiche 6/05
+library(ggplot2)
+cover <- c("Agriculture","Forest") #recuperiamo l'output di ieri
+before <- c(10.9,89.1)
+after <- c(48.2,51.8)
+output <- data.frame(cover,before,after)
+output
+library(gridExtra)
+# plottiamo i grafici che sono degli istogrammi che mostrano i cambiamenti
+grafico1 <- ggplot(output, aes(x=cover, y=before, color=cover)) +
+geom_bar(stat="identity", fill="white")
+grafico2 <- ggplot(output, aes(x=cover, y=after, color=cover)) +
+geom_bar(stat="identity", fill="white")
+grid.arrange(grafico1, grafico2, nrow = 1) #il grid.arrange equivale al par
+ #aggiungiamo un limite alla y=100 in modo tale che i grafici siano più confrontabili 
+grafico1 <- ggplot(output, aes(x=cover, y=before, color=cover)) + 
+geom_bar(stat="identity", fill="white") +
+ylim(0, 100)
+grafico2 <- ggplot(output, aes(x=cover, y=after, color=cover)) + 
+geom_bar(stat="identity", fill="white") +
+ylim(0, 100) 
+grid.arrange(grafico1, grafico2, nrow = 1)
 
 
 
