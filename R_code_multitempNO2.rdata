@@ -57,10 +57,15 @@ plot(EN10, col=cl)
 plot(EN11, col=cl)
 plot(EN12, col=cl)
 plot(EN13, col=cl)
-## 6/05 
-
-
-
+## 6/05 caricare i dati in una sola tranche
+library(raser)
+setwd("~/lab/esa_no2") #ho messo in una sottocartella le 13 immagini 
+rlist <- list.files(pattern=".png") #creo una lista di file che sono accomunati dalla dicitura .png
+rlist #vedo la lista che ho appena creato (ci sono le 13 immagink)
+listafinale <- lapply(rlist, raster) #la funzione lapply opera una funzione su una lista di file( noi appliciamo la funzione ratser)
+EN <- stack(listafinale) #la funzione stack imballa le 13 immagini in una sola 
+cl <- colorRampPalette(c('red','orange','yellow'))(100) # 
+plot(EN, col=cl) #plot della nuova immagine che comprende tutte le 13 precedenti e con una nuova nuance di colori.
 
 
 
