@@ -19,6 +19,16 @@ EN11 <- raster("EN_0011.png")
 EN12 <- raster("EN_0012.png")
 EN13 <- raster("EN_0013.png")
 #potevo fare un ciclo for per fare prima 
+list_rast=list()
+for(i in 1:length(rlist)){
+  r=raster(rlist[[i]])
+  list_rast[[i]]=r
+}
+# oppure un altro metodo studiato ah hoc per R
+library(raser)
+setwd("~/lab/esa_no2") #si crea una sottocartella con tutte le immagini png
+rlist=list.files(pattern=".png", full.names=T) #in pratica racchiude i file che ci interessano in una lista
+list_rast=lapply(rlist, raster) #la funzione lapply le importa
 #plot della immagine uno e della 13 per vedere confronto
 cl <- colorRampPalette(c('red','orange','yellow'))(100) #cambiamo i colori 
 plot(EN01, col=cl)
@@ -47,5 +57,33 @@ plot(EN10, col=cl)
 plot(EN11, col=cl)
 plot(EN12, col=cl)
 plot(EN13, col=cl)
+## 6/05 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
