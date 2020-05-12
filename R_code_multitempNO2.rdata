@@ -59,7 +59,7 @@ plot(EN12, col=cl)
 plot(EN13, col=cl)
 ## 6/05 caricare i dati in una sola tranche
 library(raser)
-setwd("~/lab/esa_no2") #ho messo in una sottocartella le 13 immagini 
+setwd("C:/lab_eco/esa_no2") #ho messo in una sottocartella le 13 immagini 
 rlist <- list.files(pattern=".png") #creo una lista di file che sono accomunati dalla dicitura .png
 rlist #vedo la lista che ho appena creato (ci sono le 13 immagink)
 listafinale <- lapply(rlist, raster) #la funzione lapply opera una funzione su una lista di file( noi appliciamo la funzione ratser)
@@ -67,10 +67,41 @@ EN <- stack(listafinale) #la funzione stack imballa le 13 immagini in una sola
 cl <- colorRampPalette(c('red','orange','yellow'))(100) # 
 plot(EN, col=cl) #plot della nuova immagine che comprende tutte le 13 precedenti e con una nuova nuance di colori.
 
-
-
-
-
+##12/05 rifacciamo l'importazione dei dati
+library(raster) #richiamiamo la libreria raster
+#abbiamo prima spostato tutti i file da importare in una sottocartella della nosta lab_eco
+setwd("C:/lab_eco/esa_no2")
+rlist <- list.files(pattern=".png") #creaiamo una lista di file che hanno in comune l'estensione .png
+rlist #scrivendo il nome che le ho associato vedo i file che sono compresi 
+# vedo questa lista infatti:  [1] "EN_0001.png" "EN_0002.png" "EN_0003.png" "EN_0004.png" "EN_0005.png"
+ [6] "EN_0006.png" "EN_0007.png" "EN_0008.png" "EN_0009.png" "EN_0010.png"
+[11] "EN_0011.png" "EN_0012.png" "EN_0013.png"
+#adesso con la funzione raster posso importare le immagini
+#lapply applica una funzione ad una lista, in pratica applico raster alla lista che ho appena crreato
+listafinale <- lapply(rlist, raster)
+listafinale #mi fa vedere le caratteristiche dei 13 file 
+#vedo [[1]]
+class      : RasterLayer 
+band       : 1  (of  3  bands)
+dimensions : 432, 768, 331776  (nrow, ncol, ncell)
+resolution : 1, 1  (x, y)
+extent     : 0, 768, 0, 432  (xmin, xmax, ymin, ymax)
+crs        : NA 
+source     : C:/lab_eco/esa_no2/EN_0001.png 
+names      : EN_0001 
+values     : 0, 255  (min, max)
+EN <- stack(listafinale) #questa Funzione raggruppa tutte le 13 immagini in una unica 
+#facciamo la differenza tra la prima immagine e l'ultima 
+difEN <- EN$EN_0013 - EN$EN_0001 #il dollaro lega 
+cld <- colorRampPalette(c('blue','white','red'))(100) # 
+plot(difEN, col=cld)
+cl <- colorRampPalette(c('red','orange','yellow'))(100) #
+ plot(EN, col=cl)
+boxplot(EN) # mi fa un grafico dove si vede in un certo senso la distribuzione 
+boxplot(EN, horizontal=T) #lo metto orrizontale perchè non si capiva bene 
+boxplot(EN, horizontal=T,outline=F) #si vede ancora meglio il calo dei valori massimi 
+boxplot(EN, horizontal=T,outline=F,axes=T) #aggiungo anche gli assi
+       
 
 
 
