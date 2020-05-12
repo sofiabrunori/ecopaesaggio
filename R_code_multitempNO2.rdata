@@ -101,7 +101,7 @@ boxplot(EN) # mi fa un grafico dove si vede in un certo senso la distribuzione
 boxplot(EN, horizontal=T) #lo metto orrizontale perchè non si capiva bene 
 boxplot(EN, horizontal=T,outline=F) #si vede ancora meglio il calo dei valori massimi 
 boxplot(EN, horizontal=T,outline=F,axes=T) #aggiungo anche gli assi
-       
+boxplot(EN, horizontal=T,outline=F,axes=F)   #vedo comè senza perchè in realtà =T è quello d default
 
 
 
