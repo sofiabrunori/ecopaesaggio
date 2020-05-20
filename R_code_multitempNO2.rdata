@@ -118,8 +118,3 @@ boxplot(EN, horizontal=T,outline=F,axes=F)   #vedo comè senza perchè in realt�
 
 
 
-
-
-
-
-
