@@ -7,8 +7,8 @@
 6. R_code_landcover.r   
 7. R_code_multitemp.r   
 8. R_code_multitemp_NO2.r   
-9. R_code_snow.r   
-10. R_code_patches.r  
+8. R_code_snow.r   
+9. R_code_patches.r  
 ###  1 R_code_first.R
 
 ### 2  R_code_spatial.r
@@ -596,36 +596,38 @@ boxplot(EN, horizontal=T,outline=F,axes=T) #aggiungo anche gli assi
 boxplot(EN, horizontal=T,outline=F,axes=F)   #vedo comè senza perchè in realtà =T è quello d default
 
 
-### 9 #la prima operazione è il settaggio della WD
+### 9 R_code_patches.R
+
+# SB la prima operazione è il settaggio della WD
 setwd("C:/lab_eco/")
-
-#carichiamo la libreria raster, solitamente la libreria è la prima cosa da settare
+# SB carichiamo la libreria raster, solitamente la libreria è la prima cosa da settare
 library(rster) 
-
-#per caricare la mappa devo utilizzare la funzione raster (se fosse stato un file a + livelli dovevo usare brik)
-d1c <- raster("d1c.tif") #do il nome e lo assegno con la freccia
-d2c <- raster("d2c.tif") #do il nome e lo assegno con la freccia 
-
-#procediamo col fare un plot per vedere cosa ho davanti
-par(mfrow=c(1,2)) #par serve per mettere 2 immagini di fianco o incolonnate (è un arrey (2,1))
-cl <- colorRampPalette(c('green','black'))(100) # metto anche una nuova color ramp palette (metto in verde la foresta e nero la non foresta)
+install.packages("igraph") # SB questa libreria mi permette di creare le patches
+library(igraph) 
+library(ggplot) # SB mi serge ggplot per il grafico finale
+# SB per caricare la mappa devo utilizzare la funzione raster (se fosse stato un file a + livelli dovevo usare brik)
+d1c <- raster("d1c.tif") # SB do il nome e lo assegno con la freccia
+d2c <- raster("d2c.tif") # SB do il nome e lo assegno con la freccia 
+# SB procediamo col fare un plot per vedere cosa ho davanti
+par(mfrow=c(1,2)) # SB par serve per mettere 2 immagini di fianco o incolonnate (è un arrey (2,1))
+cl <- colorRampPalette(c('green','black'))(100) # SB metto anche una nuova color ramp palette (metto in verde la foresta e nero la non foresta)
 plot(d1c,col=cl)
 plot(d2c,col=cl)
-#mi accorgo che è invertito perciò inverto la cl
+# SB mi accorgo che è invertito perciò inverto gli elementi dell'array
 cl <- colorRampPalette(c('black','green'))(100)
 plot(d1c,col=cl)
 plot(d2c,col=cl)
-### la foresta è la classe 1 e agricoltura è la classe 1
+### la foresta= classe 2 e agricoltura= classe 1
 
-#estraiamo la foresta 
-#la funzione che lo permette è cbind
-# devo riclassificare l'immagine riassegmando dei valori (in questo caso do valore nullo ad agricoltura)
+# SB estraiamo la foresta 
+# SB la funzione che lo permette è cbind
+# SB devo riclassificare l'immagine riassegmando dei valori (in questo caso do valore nullo ad agricoltura)
 d1c.for <- reclassify(d1c, cbind(1,NA)) #dell'immagine 1 che corrisponde a d1c modifico la classe 1 (agricoltura e gli do NA not assigned)
 par(mfrow=c(1,2))
 cl <- colorRampPalette(c('black','green'))(100) #
 plot(d1c,col=cl)
 plot(d1c.for)
-#rimetto la colo ramp di prima
+#rimetto la color ramp palette di prima
 par(mfrow=c(1,2))
 cl <- colorRampPalette(c('black','green'))(100) #
 plot(d1c,col=cl)
@@ -636,47 +638,54 @@ par(mfrow=c(1,2))
 cl <- colorRampPalette(c('black','green'))(100)
 plot(d1c.for, col=cl)
 plot(d2c.for, col=cl)
-## creiamo le petch unendo i pixel vivini creando una singola petch
-#la funzione che lo permette è clamp
+# SB creiamo le petch unendo i pixel vivini creando una singola petch
+# SB la funzione che lo permette è clamp
+# SB non aveva funzionato perchè non era stata installata la libreria igrapg
+install.packages("igraph")
+library(igraph)
 d1c.for.patches <-  clump(d1c.for)
 d2c.for.patches <-  clump(d2c.for)
-# la funzione writeraster esporta il file appena creato all'interno della cartella lab_eco
+# SB la funzione writeraster esporta il file appena creato all'interno della cartella lab_eco
 writeRaster(d1c.for.patches, "d1c.for.patches.tif")
 writeRaster(d2c.for.patches, "d2c.for.patches.tif")
-#per importarle su R
+# SB per importarle su R
 # d1c.for.pacthes <- raster("d1c.for.pacthes.tif")
 # d2c.for.pacthes <- raster("d2c.for.pacthes.tif")
-#plottiamole entrambe le nuove immagini vicine 
+# EX plottiamole entrambe le nuove immagini vicine 
 par(mfrow=c(1,2))
 cl <- colorRampPalette(c('red','green','yellow'))(100)
 plot(d1c.for.patches, col=cl)
 plot(d2c.for.patches, col=cl)
-# creiamo una color ramp palette più utile al nostro fine
+# SB creiamo una color ramp palette più utile al nostro fine
 cl <- colorRampPalette(c('dark blue','blue','green','orange','yellow','red'))(100) # 
-# replottiamo
+# SB replottiamo
 cl <- colorRampPalette(c('dark blue','blue','green','orange','yellow','red'))(100) # 
 plot(d1c.for.patches, col=cl)
 plot(d2c.for.patches, col=cl)
-#definiamo quantitativamente il numero delle petchs che abbiamo 
- d1c.for.patches
-# class      : RasterLayer 
-#  dimensions : 478, 714, 341292  (nrow, ncol, ncell)
-#resolution : 1, 1  (x, y)
-#extent     : 0, 714, 0, 478  (xmin, xmax, ymin, ymax)
-#crs        : NA 
-#source     : memory
-#names      : clumps 
-#values     : 1, 301  (min, max)
+# SB definiamo quantitativamente il numero delle petchs che abbiamo 
+ d1c.for.patches # SB digitando questo R mi mostra le caratteristiche (values max= 301= numero patches)
+# SB class      : RasterLayer 
+# SB dimensions : 478, 714, 341292  (nrow, ncol, ncell)
+# SB resolution : 1, 1  (x, y)
+# SB extent     : 0, 714, 0, 478  (xmin, xmax, ymin, ymax)
+# SB crs        : NA 
+# SB source     : memory
+# SB names      : clumps 
+# SB values     : 1, 301  (min, max)
 #faccio lo stesso per la 2
 d2c.for.patches
-# max petches1 =301
-# max petches 2 = 1212
-# facciamo un plot con ggplot
-time <- c("Before deforestation","After deforestation")
+#  SB max petches1 =301
+#  SB max petches 2 = 1212
+# SB facciamo un plot con ggplot
+time <- c("Before deforestation","After deforestation") #per evitare che mi mostri le colonne prima after poi before dovrei dargli nomi diversi perchè va in ordine alfabetico
 npatches <- c(301,1212)
 output <- data.frame(time,npatches)
 attach(output)
 library(ggplot2)
 ggplot(output, aes(x=time, y=npatches, color="red")) + geom_bar(stat="identity", fill="white")
+
+
+
+
 
 
