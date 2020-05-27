@@ -1,11 +1,11 @@
-#settiamo la wd anche se non serve in realtà perchè l abbiamo fatta prima
+# SB settiamo la wd per prima cosa
 setwd("C:/lab_eco/")
-#la libreria che utilizziamo è raster quindi la richiamo
+# SB la libreria che utilizziamo è raster quindi la richiamo
 library(raster) #in realtà non avendo chiuso R non serviva farlo 
-#ora prendiamo dentro tramite la funzione ratser la prima immagine presa da iol che si trova in lab_eco
-EN01 <- raster("EN_0001.png") #le do anche un nome più comodo
-plot(EN01) # così la visualizzo (è la situa dell'azoto a gennaio)
-#procediampo ad importare tutte le immagini 
+# SB ora importiamo tramite la funzione ratser la prima immagine presa da iol che si trova in lab_eco
+EN01 <- raster("EN_0001.png") # SB le do anche un nome più comodo
+plot(EN01) # SB così la visualizzo la situazione dell'azoto a gennaio
+# SB procediampo ad importare tutte le immagini 
 EN02 <- raster("EN_0002.png")
 EN03 <- raster("EN_0003.png")
 EN04 <- raster("EN_0004.png")
@@ -18,31 +18,32 @@ EN10 <- raster("EN_0010.png")
 EN11 <- raster("EN_0011.png")
 EN12 <- raster("EN_0012.png")
 EN13 <- raster("EN_0013.png")
-#potevo fare un ciclo for per fare prima 
-list_rast=list()
-for(i in 1:length(rlist)){
-  r=raster(rlist[[i]])
-  list_rast[[i]]=r
-}
-# oppure un altro metodo studiato ah hoc per R
+# SB potevo fare un ciclo for per fare prima 
+# list_rast=list()
+# for(i in 1:length(rlist)){
+#  r=raster(rlist[[i]])
+#  list_rast[[i]]=r
+# }
+# SB oppure un altro metodo studiato ah hoc per R
 library(raser)
-setwd("~/lab/esa_no2") #si crea una sottocartella con tutte le immagini png
-rlist=list.files(pattern=".png", full.names=T) #in pratica racchiude i file che ci interessano in una lista
-list_rast=lapply(rlist, raster) #la funzione lapply le importa
-#plot della immagine uno e della 13 per vedere confronto
+setwd("~/lab/esa_no2") # SB si crea una sottocartella con tutte le immagini .png
+rlist=list.files(pattern=".png", full.names=T) # SB in pratica racchiude i file che ci interessano in una lista
+list_rast=lapply(rlist, raster) # SB la funzione lapply le importa
+# SB se scrivo rlist su R mi mostra la lista con le 13 immagini.
+# SB plot della immagine uno e della 13 per vedere confronto
 cl <- colorRampPalette(c('red','orange','yellow'))(100) #cambiamo i colori 
 plot(EN01, col=cl)
- plot(EN013, col=cl)
-par(mfrow=c(1,2))
+plot(EN013, col=cl)
+par(mfrow=c(1,2)) # SB si vede meglio se le metto affiancate
 plot(EN01, col=cl)
 plot(EN13, col=cl)
-#ora facciamo una differenza tra le due immagini 
+# SB ora facciamo una differenza tra le due immagini 
 difno2 <- EN13 - EN01
 cldif <- colorRampPalette(c('blue','black','yellow'))(100) #
 plot(difno2, col=cldif)
-#facciamo delle statistiche di base
-#1 plottiamo tutte le mappe, ho due strade 
-#la più lentapar(mfrow=c(4,4))
+# SB facciamo delle statistiche di base
+# SB plottiamo tutte le mappe, ho due strade per farlo  
+# SB la più lentapar(mfrow=c(4,4))
 par(mfrow=c(4,4))
 plot(EN01, col=cl)
 plot(EN02, col=cl)
@@ -57,17 +58,12 @@ plot(EN10, col=cl)
 plot(EN11, col=cl)
 plot(EN12, col=cl)
 plot(EN13, col=cl)
-## 6/05 caricare i dati in una sola tranche
-library(raser)
-setwd("C:/lab_eco/esa_no2") #ho messo in una sottocartella le 13 immagini 
-rlist <- list.files(pattern=".png") #creo una lista di file che sono accomunati dalla dicitura .png
-rlist #vedo la lista che ho appena creato (ci sono le 13 immagink)
-listafinale <- lapply(rlist, raster) #la funzione lapply opera una funzione su una lista di file( noi appliciamo la funzione ratser)
-EN <- stack(listafinale) #la funzione stack imballa le 13 immagini in una sola 
+# SB il metodo più veloce è creare uno stack 
+EN <- stack(EN01,EN02,EN03,EN04,EN05,EN06,EN07,EN08,EN09,EN10,EN11,EN12,EN13) # SB la funzione stack imballa le 13 immagini in una sola 
 cl <- colorRampPalette(c('red','orange','yellow'))(100) # 
-plot(EN, col=cl) #plot della nuova immagine che comprende tutte le 13 precedenti e con una nuova nuance di colori.
+plot(EN, col=cl) # SB plot della nuova immagine che comprende tutte le 13 precedenti e con una nuova nuance di colori.
 
-##12/05 rifacciamo l'importazione dei dati
+##12/05 rifacciamo l'importazione dei dati usando lapply
 library(raster) #richiamiamo la libreria raster
 #abbiamo prima spostato tutti i file da importare in una sottocartella della nosta lab_eco
 setwd("C:/lab_eco/esa_no2")
@@ -81,27 +77,27 @@ rlist #scrivendo il nome che le ho associato vedo i file che sono compresi
 listafinale <- lapply(rlist, raster)
 listafinale #mi fa vedere le caratteristiche dei 13 file 
 #vedo [[1]]
-class      : RasterLayer 
-band       : 1  (of  3  bands)
-dimensions : 432, 768, 331776  (nrow, ncol, ncell)
-resolution : 1, 1  (x, y)
-extent     : 0, 768, 0, 432  (xmin, xmax, ymin, ymax)
-crs        : NA 
-source     : C:/lab_eco/esa_no2/EN_0001.png 
-names      : EN_0001 
-values     : 0, 255  (min, max)
-EN <- stack(listafinale) #questa Funzione raggruppa tutte le 13 immagini in una unica 
-#facciamo la differenza tra la prima immagine e l'ultima 
-difEN <- EN$EN_0013 - EN$EN_0001 #il dollaro lega 
+# class      : RasterLayer 
+# band       : 1  (of  3  bands)
+# dimensions : 432, 768, 331776  (nrow, ncol, ncell)
+# resolution : 1, 1  (x, y)
+# extent     : 0, 768, 0, 432  (xmin, xmax, ymin, ymax)
+# crs        : NA 
+# source     : C:/lab_eco/esa_no2/EN_0001.png 
+# names      : EN_0001 
+# values     : 0, 255  (min, max)
+EN <- stack(listafinale) # SB questa Funzione raggruppa tutte le 13 immagini in una unica 
+# SB facciamo la differenza tra la prima immagine e l'ultima 
+difEN <- EN$EN_0013 - EN$EN_0001 # SB il dollaro lega 
 cld <- colorRampPalette(c('blue','white','red'))(100) # 
 plot(difEN, col=cld)
 cl <- colorRampPalette(c('red','orange','yellow'))(100) #
- plot(EN, col=cl)
-boxplot(EN) # mi fa un grafico dove si vede in un certo senso la distribuzione 
-boxplot(EN, horizontal=T) #lo metto orrizontale perchè non si capiva bene 
-boxplot(EN, horizontal=T,outline=F) #si vede ancora meglio il calo dei valori massimi 
-boxplot(EN, horizontal=T,outline=F,axes=T) #aggiungo anche gli assi
-boxplot(EN, horizontal=T,outline=F,axes=F)   #vedo comè senza perchè in realtà =T è quello d default
+plot(EN, col=cl)
+boxplot(EN) # SB mi fa un grafico dove si vede in un certo senso la distribuzione 
+boxplot(EN, horizontal=T) # SB lo metto orrizontale perchè non si capiva bene 
+boxplot(EN, horizontal=T,outline=F) # SB si vede ancora meglio il calo dei valori massimi 
+boxplot(EN, horizontal=T,outline=F,axes=T) # SB aggiungo anche gli assi
+boxplot(EN, horizontal=T,outline=F,axes=F)   # SB vedo comè senza perchè in realtà =T è quello d default
 
 
 
