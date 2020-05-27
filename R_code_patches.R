@@ -1,16 +1,13 @@
 # SB la prima operazione è il settaggio della WD
 setwd("C:/lab_eco/")
-
 # SB carichiamo la libreria raster, solitamente la libreria è la prima cosa da settare
 library(rster) 
 install.packages("igraph") # SB questa libreria mi permette di creare le patches
 library(igraph) 
 library(ggplot) # SB mi serge ggplot per il grafico finale
-
 # SB per caricare la mappa devo utilizzare la funzione raster (se fosse stato un file a + livelli dovevo usare brik)
 d1c <- raster("d1c.tif") # SB do il nome e lo assegno con la freccia
 d2c <- raster("d2c.tif") # SB do il nome e lo assegno con la freccia 
-
 # SB procediamo col fare un plot per vedere cosa ho davanti
 par(mfrow=c(1,2)) # SB par serve per mettere 2 immagini di fianco o incolonnate (è un arrey (2,1))
 cl <- colorRampPalette(c('green','black'))(100) # SB metto anche una nuova color ramp palette (metto in verde la foresta e nero la non foresta)
