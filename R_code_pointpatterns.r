@@ -73,3 +73,58 @@ cl<- colorRampPalette(c('green', 'violet', 'blue')) (200)
 plot(d, col=cl)
 coastlines<-readOGR("ne_10m_coastline.shp")
 plot(coastlines, add=T)
+# SB altri esempi ci color ramp
+# cl <- colorRampPalette(c('red','orange','yellow','green', 'blue')) (800)
+# cl <- colorRampPalette(c('violet','yellow','green'))(100)
+# cl <-colorRampPalette(c('white','blue','green','red','orange','yellow')) (150)
+## Ex: caricare il workspace pointpattern.RData e crare un garfico della mappa di densità
+library(spatstat) # le WD vanno sempre richiamate
+library(rgdal) 
+setwd("C:/lab_eco")
+load("pointpattern.RData") # SB la funzione load serve per caricare dataset precedentemente salvati
+ls() # SB vedo cosa ho 
+cl <- colorRampPalette(c('cyan', 'purple', 'red')) (200) # SB assegno la color ramp palette che voglio
+plot(d, col=cl, main=" ") # SB "d" era la densità
+points(covids) # SB so aggiungono anche i punti
+coastlines <- readOGR("ne_10m_coastline.shp") # SB assegno un nome più semplice allo shapefile della coastline
+plot(coastlines, add=T)
+# SB ora facciamo delle interpolazioni
+head(covid)
+marks(covids) <- covid$cases # SB la funzione marks estrae i dati associati al dataset
+s <- Smooth(covids) # SB elimina lo smoothing dei valori numerici
+plot(s)
+# Exercise: plot s con anche i punti e e coastlines
+cl <- colorRampPalette(c('cyan', 'purple', 'red')) (200) 
+plot(s, col=cl, main="estimate of cases")
+points(covids)
+coastlines <- readOGR("ne_10m_coastline.shp")
+plot(coastlines, add=T)
+# SB visualizzazione della mappa finale
+par(mfrow=c(2,1))# SB le metto nella stessa schermata 
+cl <- colorRampPalette(c('cyan', 'purple', 'red')) (200) 
+plot(d, col=cl, main=" ")
+points(covids)
+coastlines <- readOGR("ne_10m_coastline.shp")
+plot(coastlines, add=T)
+# SB interpolazione del numero di casi
+cl <- colorRampPalette(c('cyan', 'purple', 'red')) (200) 
+plot(s, col=cl, main="estimate of cases")
+points(covids)
+coastlines <- readOGR("ne_10m_coastline.shp")
+plot(coastlines, add=T)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
