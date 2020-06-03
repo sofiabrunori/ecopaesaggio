@@ -2,13 +2,14 @@
 1. R_code_first.r   
 2. R_code_spatial.r   
 3. R_code_spatial2.r
-4. R_code_point_pattern   
+4. R_code_point_patterns.r   
 5. R_code_teleril.r   
 6. R_code_landcover.r   
 7. R_code_multitemp.r   
 8. R_code_multitemp_NO2.r   
-8. R_code_snow.r   
-9. R_code_patches.r  
+9. R_code_snow.r   
+10. R_code_patches.r  
+11. R_code_crop.r
 
 ################################################################################################################################
 ###  1 R_code_first.R
@@ -844,7 +845,15 @@ output <- data.frame(time,npatches)
 attach(output)
 library(ggplot2)
 ggplot(output, aes(x=time, y=npatches, color="red")) + geom_bar(stat="identity", fill="white")
- 
+###############################################################################################################################
+################## 11. R-code_crop.r
+ setwd("C:/lab_eco/snow/") #ricorda di aggiungere anche la sottocartella
+#caricare i dati da copernicus e raggrupparli nella sottocartella 
+librart(ncdf) # questa libreria mi permette di usare il dato.nc così come lo scarico 
+rlist=list.files(pattern="snow20", full.names=T) #l'elemento in comune tra i file che che vorrei importare è snow20
+list_rast=lapply(rlist, raster)
+snow.multitemp <- stack(list_rast)
+plot(snow.multitemp)
 
 
 
