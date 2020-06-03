@@ -847,16 +847,48 @@ library(ggplot2)
 ggplot(output, aes(x=time, y=npatches, color="red")) + geom_bar(stat="identity", fill="white")
 ###############################################################################################################################
 ################## 11. R-code_crop.r
- setwd("C:/lab_eco/snow/") #ricorda di aggiungere anche la sottocartella
-#caricare i dati da copernicus e raggrupparli nella sottocartella 
-librart(ncdf) # questa libreria mi permette di usare il dato.nc così come lo scarico 
-rlist=list.files(pattern="snow20", full.names=T) #l'elemento in comune tra i file che che vorrei importare è snow20
+ setwd("C:/lab_eco/snow/") # SB ricorda di aggiungere anche la sottocartella
+# SB caricare i dati da copernicus e raggrupparli nella sottocartella 
+librart(ncdf) # SB questa libreria mi permette di usare il dato.nc così come lo scarico 
+rlist=list.files(pattern="snow20", full.names=T) # SB l'elemento in comune tra i file che che vorrei importare è snow20
 list_rast=lapply(rlist, raster)
 snow.multitemp <- stack(list_rast)
 plot(snow.multitemp)
+clb <- colorRampPalette(c('dark blue','blue','light blue'))(100) # 
+plot(snow.multitemp,col=clb)
+# SB usiamo per la prima volta la funzione zoom, dobbiamo cambiare extension (le coordinate)
+snow.multitemp # SB vedo i names delle immagini che voglio plottare singolarmante
+plot(snow.multitemp$snow2010r, col=clb) # SB così con il $ lego la mia immagine al dataset che voglio plottare
+# SB con la funzione ext seleziono le coordinate x e y che voglio vedere
+extension <- c(6, 18, 40, 50)
+zoom(snow.multitemp$snow2010r, ext=extension)
+extension <- c(6, 20, 35, 50)
+zoom(snow.multitemp$snow2010r, ext=extension) # SB correggiamo con le giuste coordinate
+# SB posso usare anche il drawExtent
+ plot(snow.multitemp$snow2010r, col=clb)
+zoom(snow.multitemp$snow2010r, ext=drawExtent()) # SB fare clic e tenere premuto sulla diagonale poi ricliccare
+# SB la funzione crop taglia l'immagine su quella zona 
+extension <- c(6, 20, 35, 50)
+snow2010r.italy <- crop(snow.multitemp$snow2010r, extension) # SB uso crop e gli assoccio un nome 
+plot(snow2010r.italy, col=clb)
+# SB facciamo crop dell'intero stak
+extension <- c(6, 20, 35, 50)
+snow.multitemp.italy<- crop(snow.multitemp, extension) # SB basta che non specifico col $ l'immagine a cui devo collegarmi avendo già creato una lista (snow.multitemp)
+plot(snow.multitemp.italy, col=clb)
+# SB osservo che i range nelle legende sono differenti per rendere comparabili le immagini
+snow.multitemp.italy # SB cos' vedo tutti i range 
+#class      : RasterBrick 
+#dimensions : 150, 140, 21000, 5  (nrow, ncol, ncell, nlayers)
+#resolution : 0.1, 0.1  (x, y)
+#extent     : 6, 20, 35, 50  (xmin, xmax, ymin, ymax)
+#crs        : +proj=longlat +ellps=WGS84 +no_defs 
+#source     : memory
+#names      : snow2000r, snow2005r, snow2010r, snow2015r, snow2020r 
+#min values :        20,        20,        20,        20,        20 
+#max values :  195.3692,  194.5759,  136.6333,  130.0056,  130.5333 
+plot(snow.multitemp.italy, col=clb, zlim=c(20,200)) # SB unifichiamo il limite di solito si mette 255 perchè sistema 8bit 2^8=256
+# SB facciamo un box plot
+boxplot(snow.multitemp.italy, horizontal=T,outline=F) # SB outline significano i valori fuori trend in questo caso le metto false=F
 
-
-
-
-
-
+ ## SB se voglio usare prediction devo stare attena alla normalizzazione (moltiplico per il max e divido per il min)
+ 
