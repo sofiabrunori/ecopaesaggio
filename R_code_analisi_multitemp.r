@@ -128,4 +128,3 @@ grid.arrange(grafico1, grafico2, nrow = 1)
 
 
 
-
