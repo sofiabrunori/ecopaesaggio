@@ -2,19 +2,22 @@
 library(raster)
 library(ncdf4)
 library(rgdal)
-rlist=list.files(pattern="20", full.names=T)
+rlist=list.files(pattern=".nc", full.names=T)
 list_rast=lapply(rlist, raster)
 t_lake <- stack(list_rast)
 plot(t_lake, main= "T° acque superficiali dal 2020 al 2017")
 cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
 plot(t_lake, col=cl,main= "T° acque superficiali dal 2020 al 2017", zlim=c(275,305))
 coastlines <- readOGR("ne_10m_coastline.shp")
-plot(coastlines, add= T)
+plot(coastlines, add= T, main= "aree polari)
  
  
  extension <- c(-180, 180, -85, 60)
+ lakecut<- crop(t_lake, extension)
+ plot(lakecut, col=cl, 
 plot(prova1, col=cl, extension)
-prova1cut<- crop(prova1, extension) 
+
+ 
   plot(prova1cut, extension, col=cl)
  coastlines <- readOGR("ne_10m_coastline.shp")
  coast1cut<- crop(coastlines, extension) 
@@ -24,3 +27,7 @@ list_rast=lapply(rlist, raster)
 
 clb <- colorRampPalette(c('dark blue','blue','light blue'))(100) # 
 plot(snow.multitemp,col=clb)
+
+
+rlist=list.files(pattern=".png", full.names=T) # SB in pratica racchiude i file che ci interessano in una lista
+list_rast=lapply(rlist, raster) #
