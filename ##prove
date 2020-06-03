@@ -27,7 +27,8 @@ list_rast=lapply(rlist, raster)
 
 clb <- colorRampPalette(c('dark blue','blue','light blue'))(100) # 
 plot(snow.multitemp,col=clb)
-prova<-raster("temp.nc")
+prova<-raster("c_gls_LIE250_202003110000_Baltic_MODIS_V1.1.1.nc")
+plot(prova)
 
 rlist=list.files(pattern=".png", full.names=T) # SB in pratica racchiude i file che ci interessano in una lista
 list_rast=lapply(rlist, raster) #
