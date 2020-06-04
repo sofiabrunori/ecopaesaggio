@@ -8,8 +8,8 @@ rlist=list.files(pattern=".nc", full.names=T)
 list_rast=lapply(rlist, raster)
 t_lake <- stack(list_rast)
 cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
-plot(t_lake, main= "                                                         T° acque superficiali dal 2017 al 2020")
-plot(t_lake, col=cl,main=                                               "T° acque superficiali dal 2020 al 2017", zlim=c(275,305))
+
+plot(t_lake, col=cl,main="              T° acque superficiali dal 2017 al 2020", zlim=c(275,360))
 plot(coastlines, add=T) ##non so se funziona
 
 # altro modo per plottare senza avere il .nc nel names così riesco a plottare la 2020 e al 2017 con le coastlines
@@ -34,22 +34,31 @@ plot(coastlines, add=T)
  boxplot(BX,horizontal=T,axes=T,outline=F) ## funziona
  boxplot(BX,horizontal=T,axes=F,outline=F, main ="Aumento delle T° delle acque superficiali dei laghi dal 2017 al 2020")
  
- ## focus su aree polarti
- extension <- c(-180, 180, , -60)
+ ## focus su aree polarti ## le coastline le posso mettere solo in un confronto tra due
+ extension <- c(-180, 180, 50 , 90)
  lakecut<- crop(t_lake, extension)
- coastcut<- crop (coastlines, eztension)
+ coastcut<- crop (coastlines, extension)
  plot(lakecut, col=cl)
  plot(coastcut, add=T)
 
 # prova dell'utilizzo di prediction
 require(raster)
 require(rgdal)
-ext <- c(-180, 180, -90, 90)
+ext <- c(-180, 180, 50, 90)
 extension <- crop(t_lake, ext)
 time <- 1:nlayers(t_lake)
 fun <- function(x) {if (is.na(x[1])){ NA } else {lm(x ~ time)$coefficients[2] }} 
 predicted.lake.2025 <- calc(fun)
 plot(predicted.lake.2025)
+
+
+ext <- c(-180, 180, 50, 90)
+extension <- crop(t_lake, ext)
+    time <- 1:nlayers(t_lake)
+fun <- function(x) {if (is.na(x[1])){ NA } else {lm(x ~ time)$coefficients[2] }} 
+predicted.lake.2025 <- calc(extension, fun) # time consuming: make a pause!
+predicted.snow.2025.norm <- predicted.snow.2025*255/53.90828
+
  
 
 
