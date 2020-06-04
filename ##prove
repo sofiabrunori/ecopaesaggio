@@ -9,7 +9,7 @@ list_rast=lapply(rlist, raster)
 t_lake <- stack(list_rast)
 cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
 
-plot(t_lake, col=cl,main="              T° acque superficiali dal 2017 al 2020", zlim=c(275,305))
+plot(t_lake, col=cl,main=" T° acque superficiali dal 2017 al 2020", zlim=c(275,305))
 # primo grafico
 
 # contronto fra 2017 e 2020 con coastline
@@ -19,15 +19,15 @@ T2018 <- raster("2018.nc")
 T2019 <- raster("2019.nc")
 T2020 <- raster("2020.nc")
 par(mfrow=c(2,1))
-plot(T2017, col=cl, zlim= c(275,305))
+plot(T2017, col=cl, zlim= c(275,305), main=" T° acque superficiali dei laghi nel 2017")
 plot(coastlines, add=T)
-plot(T2020, col=cl, zlim= c(275,305))
+plot(T2020, col=cl, zlim= c(275,305), main=" T° acque superficiali dei laghi nel 2020")
 plot(coastlines, add=T).
 # secondo grafico
 
 # facciamo la differenza tra gli end member
  difT<- T2020 - T2017
-cldiff <- colorRampPalette(c('blue','white','red'))(100)
+cldiff <- colorRampPalette(c('blue','orange','red'))(100)
 plot(difT, col=cldiff, main= "grafico differenza tra l'anno 2020 e 2017")
 plot(coastlines, add=T)
 # terzo grafico 
@@ -35,14 +35,22 @@ plot(coastlines, add=T)
  # facciamo box plot con mediane
  BX <- stack (T2017, T2018, T2019, T2020)
  boxplot(BX,horizontal=T,axes=T,outline=F) ## funziona
- boxplot(BX,horizontal=T,axes=F,outline=F, main ="Aumento delle T° delle acque superficiali dei laghi dal 2017 al 2020")
+ boxplot(BX,horizontal=T,axes=T,outline=F, main ="Boxplot dei dati degli anni dal 2017 al 2020")
  # 4 grafico
  
  ## focus su alte latitudini   ## le coastline le posso mettere solo in un confronto tra due
  extension <- c(-180, 180, 50 , 90)
  lakecut<- crop(t_lake, extension)
  coastcut<- crop (coastlines, extension)
- plot(lakecut, col=cl)
+ plot(lakecut, col=cl, main="focus alte latitudini")
+ #confronto tra 2017 e 20 cost e alte lat
+ par(mfrow=c(2,1))
+  extension <- c(-180, 180, 50 , 90)
+ beforecut <- crop(T2017, extension)
+ nowcut <- crop(T2020, extension)
+ plot(beforecut, col= cl)
+ plot(coastcut, add=T)
+ plot(nowcut, col= cl)
  plot(coastcut, add=T)
 
 # prova dell'utilizzo di prediction
@@ -54,15 +62,10 @@ time <- 1:nlayers(t_lake)
 fun <- function(x) {if (is.na(x[1])){ NA } else {lm(x ~ time)$coefficients[2] }} 
 predicted.lake.2025 <- calc(fun)
 cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
-plot(predicted.lake.2025, col=cl)
+plot(predicted.lake.2025, col=cl, main= "Previsione per l'anno 2025")
 plot(coastcut, add=T)
 
-ext <- c(-180, 180, 50, 90)
-extension <- crop(t_lake, ext)
-    time <- 1:nlayers(t_lake)
-fun <- function(x) {if (is.na(x[1])){ NA } else {lm(x ~ time)$coefficients[2] }} 
-predicted.lake.2025 <- calc(extension, fun) # time consuming: make a pause!
-predicted.snow.2025.norm <- predicted.snow.2025*255/53.90828
+
 
  
 
