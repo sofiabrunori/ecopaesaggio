@@ -65,6 +65,16 @@ cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
 plot(predicted.lake.2025, col=cl, main= "Previsione per l'anno 2025")
 plot(coastcut, add=T)
 
+ext <- c(-180, 180, 50, 90)
+extension <- crop(t_lake, ext)
+time <- 1:nlayers(t_lake)
+fun <- function(x) {if (is.na(x[1])){ NA } else {lm(x ~ time)$coefficients[2] }} 
+predicted.lake.2025 <- calc(extension, fun) 
+predicted.lake.2025.norm <- predicted.lake.2025*301.07/271.15
+cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
+plot(predicted.lake.2025.norm, col=cl, main="previsione normalizzata per il 2025")
+plot(coastcut, add=T)
+
 
 
  
