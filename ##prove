@@ -35,7 +35,7 @@ plot(coastlines, add=T)
  boxplot(BX,horizontal=T,axes=F,outline=F, main ="Aumento delle T° delle acque superficiali dei laghi dal 2017 al 2020")
  
  ## focus su aree polarti
- extension <- c(-180, 180, 90, 60)
+ extension <- c(-180, 180, , -60)
  lakecut<- crop(t_lake, extension)
  coastcut<- crop (coastlines, eztension)
  plot(lakecut, col=cl)
@@ -51,7 +51,7 @@ fun <- function(x) {if (is.na(x[1])){ NA } else {lm(x ~ time)$coefficients[2] }}
 predicted.lake.2025 <- calc(fun)
 plot(predicted.lake.2025)
  
- setwd("C:/lab_eco/snow/")
+
 
 
 
