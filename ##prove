@@ -26,12 +26,33 @@ plot(coastlines, add=T).
 # secondo grafico
 
 # facciamo la differenza tra gli end member
- difT<- T2020 - T2017
+difT <- T2020-T2017
 cldiff <- colorRampPalette(c('blue','orange','red'))(100)
 plot(difT, col=cldiff, main= "grafico differenza tra l'anno 2020 e 2017")
 plot(coastlines, add=T)
 # terzo grafico 
 
+## evidenziamo laghi che si sono scaldati da laghi che si sono raffreddati
+classificazione <- unsuperClass(difT, nClasses=2, clusterMap=TRUE)
+clclas <- colorRampPalette(c('red','blue'))(100)
+plot(classificazione$map,col=clclas)
+plot(coastlines, add=T) 
+## vediamo frequenze 
+freq(classificazione$map)
+#    value     count
+#[1,]     1    462107
+#[2,]     2    118743
+totlake <- 462107+118743
+# mi da [1] 580850
+ percent1 <- 462107*100/totlake
+ percent2 <- 118743*100/totlake
+  percent1 
+  # [1] 79.55703
+  percent2
+  #[1] 20.44297
+ data <- c("79.5", "20.5")
+ plot(data, col="purple", pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali")
+ 
  # facciamo box plot con mediane
  BX <- stack (T2017, T2018, T2019, T2020)
  boxplot(BX,horizontal=T,axes=T,outline=F) ## funziona
@@ -77,7 +98,6 @@ plot(coastcut, add=T)
 
 
 
- 
 
 
 
