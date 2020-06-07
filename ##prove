@@ -22,7 +22,7 @@ par(mfrow=c(2,1))
 plot(T2017, col=cl, zlim= c(275,305), main=" T° acque superficiali dei laghi nel 2017")
 plot(coastlines, add=T)
 plot(T2020, col=cl, zlim= c(275,305), main=" T° acque superficiali dei laghi nel 2020")
-plot(coastlines, add=T).
+plot(coastlines, add=T)
 # secondo grafico
 
 # facciamo la differenza tra gli end member
