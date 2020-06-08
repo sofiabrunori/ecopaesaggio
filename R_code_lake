@@ -5,11 +5,10 @@ library(rgdal)
 library(RStoolbox)
 coastlines <- readOGR("ne_10m_coastline.shp")
 rlist=list.files(pattern=".nc", full.names=T)
-list_rast=lapply(rlist, raster)
-t_lake <- stack(list_rast)
+list_lake =lapply(rlist, raster)
+t_lake <- stack(list_lake)
 cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
-
-plot(t_lake, col=cl,main=" T° acque superficiali dal 2017 al 2020", zlim=c(275,305))
+plot(t_lake,col=cl,main="T°acque superficiali dal 2017 al 2020",zlim=c(275,305))
 # primo grafico
 
 # contronto fra 2017 e 2020 con coastline
@@ -17,11 +16,12 @@ plot(t_lake, col=cl,main=" T° acque superficiali dal 2017 al 2020", zlim=c(275,
 T2017 <- raster("2017.nc")
 T2018 <- raster("2018.nc")
 T2019 <- raster("2019.nc")
+T2017 <- raster("2017.nc")
 T2020 <- raster("2020.nc")
 par(mfrow=c(2,1))
-plot(T2017, col=cl, zlim= c(275,305), main=" T° acque superficiali dei laghi nel 2017")
+plot(T2017, col=cl, zlim= c(275,305), main="T° acque superficiali dei laghi nel 2017")
 plot(coastlines, add=T)
-plot(T2020, col=cl, zlim= c(275,305), main=" T° acque superficiali dei laghi nel 2020")
+plot(T2020, col=cl, zlim= c(275,305), main="T° acque superficiali dei laghi nel 2020")
 plot(coastlines, add=T)
 # secondo grafico
 
@@ -39,23 +39,24 @@ plot(classificazione$map,col=clclas)
 plot(coastlines, add=T) 
 ## vediamo frequenze 
 freq(classificazione$map)
-#    value     count
-#[1,]     1    462107
-#[2,]     2    118743
+  #    value     count
+  #[1,]     1    462107
+  #[2,]     2    118743
 totlake <- 462107+118743
-# mi da [1] 580850
- percent1 <- 462107*100/totlake
- percent2 <- 118743*100/totlake
-  percent1 
+totlake
+  #[1] 580850
+percent1 <- 462107*100/totlake
+percent2 <- 118743*100/totlake
+percent1 
   # [1] 79.55703
   percent2
   #[1] 20.44297
- data <- c("79.5", "20.5")
- plot(data, col="purple", pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali")
+data <- c("79.5", "20.5")
+plot(data, col="purple", pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali")
  
  # facciamo box plot con mediane
  BX <- stack (T2017, T2018, T2019, T2020)
- boxplot(BX,horizontal=T,axes=T,outline=F) ## funziona
+ boxplot(BX,horizontal=T,axes=T,outline=F)
  boxplot(BX,horizontal=T,axes=T,outline=F, main ="Boxplot dei dati degli anni dal 2017 al 2020")
  # 4 grafico
  
@@ -66,7 +67,7 @@ totlake <- 462107+118743
  plot(lakecut, col=cl, main="focus alte latitudini")
  #confronto tra 2017 e 20 cost e alte lat
  par(mfrow=c(2,1))
-  extension <- c(-180, 180, 50 , 90)
+ extension <- c(-180, 180, 50 , 90)
  beforecut <- crop(T2017, extension)
  nowcut <- crop(T2020, extension)
  plot(beforecut, col= cl)
@@ -74,7 +75,7 @@ totlake <- 462107+118743
  plot(nowcut, col= cl)
  plot(coastcut, add=T)
 
-# prova dell'utilizzo di prediction
+#utilizzo di prediction
 require(raster)
 require(rgdal)
 ext <- c(-180, 180, 50, 90)
@@ -86,6 +87,7 @@ cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
 plot(predicted.lake.2025, col=cl, main= "Previsione per l'anno 2025")
 plot(coastcut, add=T)
 
+# prediction normalizzata
 ext <- c(-180, 180, 50, 90)
 extension <- crop(t_lake, ext)
 time <- 1:nlayers(t_lake)
@@ -96,7 +98,6 @@ cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
 plot(predicted.lake.2025.norm, col=cl, main="previsione normalizzata per il 2025")
 plot(coastcut, add=T)
 
-plot(classificazione[values == 1,])
 
 
 
