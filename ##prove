@@ -96,7 +96,7 @@ cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
 plot(predicted.lake.2025.norm, col=cl, main="previsione normalizzata per il 2025")
 plot(coastcut, add=T)
 
-
+plot(classificazione[values == 1,])
 
 
 
