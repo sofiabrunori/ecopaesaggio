@@ -10,7 +10,7 @@
 9. R_code_snow.r   
 10. R_code_patches.r  
 11. R_code_crop.r
-
+12. R_ code_spieces_distribution_modeling
 ################################################################################################################################
 ###  1 R_code_first.R
 #primo codice
@@ -892,3 +892,67 @@ boxplot(snow.multitemp.italy, horizontal=T,outline=F) # SB outline significano i
 
  ## SB se voglio usare prediction devo stare attena alla normalizzazione (moltiplico per il max e divido per il min)
  
+###############################################################################################################
+#########################################################
+12. spieces_diatribution_modeling
+install.packages("sdm") # SB il pacchetto che serve per queste modellazioni è questo
+library(sdm)
+library(raster)
+library(rgdal)
+file <- system.file("external/species.shp", package="sdm") # SB gli shape file vengono letti da rgdal
+species <- shapefile(file) 
+species # SB vediamo le caratteristiche, nell'utm l'Italia è nei fusi 32-33 
+#class       : SpatialPointsDataFrame 
+#features    : 200 
+#extent      : 110112, 606053, 4013700, 4275600  (xmin, xmax, ymin, ymax)
+#crs         : +proj=utm +zone=30 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
+#variables   : 1
+#names       : Occurrence   # SB la variabile occurrence mi mostra se la specie è presente o assente 
+#min values  :          0 
+#max values  :          1 
+species$Occurrence # SB così lego la variabile al dataset e vedo quello che ho ovvero serie di 0 e 1
+plot(species) # SB vedo il plot che ottengo (è una nuvola di punti)
+# SB visualizziamo in modo diverso le presenze dalle assenze 
+plot(species[species$Occurrence == 1,],col='blue',pch=16) # SB dico di plottare in blu i punti dove la specie è ugulae a 1
+points(species[species$Occurrence == 0,],col='red',pch=16) # SB aggiungiamo i punti dove la specie è assente (0)
+# SB cerchiamo di montare le variabili ambientali per comporre il modello
+path <- system.file("external", package="sdm") # SB importiamo la cartella all'interno del percorso
+lst <- list.files(path=path,pattern='asc$',full.names = T) # SB facciamo una lista di files con il pattern .asc (è un formato)
+lst # SB vediamo cosa contiene 
+#[1] "C:/Users/utente/Documents/R/win-library/3.6/sdm/external/elevation.asc"    
+#[2] "C:/Users/utente/Documents/R/win-library/3.6/sdm/external/precipitation.asc"
+#[3] "C:/Users/utente/Documents/R/win-library/3.6/sdm/external/temperature.asc"  
+#[4] "C:/Users/utente/Documents/R/win-library/3.6/sdm/external/vegetation.asc"   
+preds <- stack(lst) # SB facciamo uno stak con questi livelli tutti insieme delle variabili predittrici
+cl <- colorRampPalette(c('pink','purple','cyan')) (100)
+plot(preds, col=cl) # SB così vediamo come le specie si distribuiscono rispetto alle pariabili
+plot(preds$elevation, col=cl) # SB facciamolo solo per elevation
+points(species[species$Occurrence == 1,], pch=16) # SB vediamo dove la specie era presente
+plot(preds$temperature, col=cl) # SB temperatura
+points(species[species$Occurrence == 1,], pch=16)
+plot(preds$vegetation, col=cl) # SB vegetation
+points(species[species$Occurrence == 1,], pch=16)
+# SB facciamo un modellino lineare che contiente tutte queste variabili
+d <- sdmData(train=species, predictors=preds)
+# SB train significa il dato delle specie per noi è infatti il dataset spieces
+# SB predictors sono le 4 variabili che abbiamo
+d
+#class                                 : sdmdata 
+#=========================================================== 
+#number of species                     :  1 
+#species names                         :  Occurrence 
+#number of features                    :  4 
+#feature names                         :  elevation, precipitation, temperature, ... 
+#type                                  :  Presence-Absence 
+#has independet test data?             :  FALSE 
+#number of records                     :  200 
+#has Coordinates?                      :  TRUE 
+# SB la funzione sdm mi permette di fare la modellazione
+# SB la tilde corrispone all'uguale nei modelli
+m1 <- sdm(Occurrence ~ elevation + precipitation + temperature + vegetation, data=d, methods='glm')
+# SB facciamo una previsione 
+p1 <- predict(m1, newdata=preds)
+plot(p1, col=cl)
+points(species[species$Occurrence == 1,], pch=16)
+
+
