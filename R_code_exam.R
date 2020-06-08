@@ -11,6 +11,7 @@
 10. R_code_patches.r  
 11. R_code_crop.r
 12. R_ code_spieces_distribution_modeling
+13. R_code_project
 ################################################################################################################################
 ###  1 R_code_first.R
 #primo codice
@@ -954,5 +955,7 @@ m1 <- sdm(Occurrence ~ elevation + precipitation + temperature + vegetation, dat
 p1 <- predict(m1, newdata=preds)
 plot(p1, col=cl)
 points(species[species$Occurrence == 1,], pch=16)
-
+##################################################################################################################################
+####################
+13. R_code_project
 
