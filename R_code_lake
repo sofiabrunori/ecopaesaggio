@@ -53,6 +53,33 @@ percent1
   #[1] 20.44297
 data <- c("79.5", "20.5")
 plot(data, col="purple", pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali")
+
+## tentativo con 3 classi
+ classificazione3 <- unsuperClass(difT, nClasses=3, clusterMap=TRUE)
+ clclas3 <- colorRampPalette(c('red','green','blue'))(100)
+ plot(classificazione3$map,col=clclas3)
+ plot(coastlines, add=T) 
+ freq(classificazione3$map)
+#     value     count
+#[1,]     1    422352
+#[2,]     2    146581
+#[3,]     3    11917
+#[4,]    NA 932539150
+totlake3 <- 422352 +146581 +11917
+totlake3
+#[1] 580850
+percent1 <- 422352*100/totlake3
+percent2 <- 146581*100/totlake3
+percent3 <- 11917*100/totlake3
+percent1 
+percent2 
+percent3 
+# [1] 72.71275
+# [2] 25.2356
+# [3] 2.051648
+data <- c("72.7","25.2", "2.5")
+plot(data, col="purple", pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali")
+
  
  # facciamo box plot con mediane
  BX <- stack (T2017, T2018, T2019, T2020)
