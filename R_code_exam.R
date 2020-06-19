@@ -958,4 +958,135 @@ points(species[species$Occurrence == 1,], pch=16)
 ##################################################################################################################################
 ####################
 13. R_code_project
+setwd("C:/lab_eco/EX/")
+library(raster)
+library(ncdf4)
+library(rgdal)
+library(RStoolbox)
+library(ggplot2)
+coastlines <- readOGR("ne_10m_coastline.shp")
+rlist=list.files(pattern=".nc", full.names=T)
+list_lake =lapply(rlist, raster)
+t_lake <- stack(list_lake)
+cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
+plot(t_lake,col=cl,main="T°acque superficiali dal 2017 al 2020",zlim=c(275,305))
+########################primo grafico
+# contronto fra 2017 e 2020 con coastline
+# altro modo per plottare senza avere il .nc nel names così riesco a plottare la 2020 e al 2017 con le coastlines
+T2017 <- raster("2017.nc")
+T2018 <- raster("2018.nc")
+T2019 <- raster("2019.nc")
+T2017 <- raster("2017.nc")
+T2020 <- raster("2020.nc")
+coastlines <- readOGR("ne_10m_coastline.shp")
+par(mfrow=c(2,1))
+plot(T2017, col=cl, zlim= c(275,305), main="T° acque superficiali dei laghi nel 2017")
+plot(coastlines, add=T)
+plot(T2020, col=cl, zlim= c(275,305), main="T° acque superficiali dei laghi nel 2020")
+plot(coastlines, add=T)
+################################secondo grafico
+# facciamo la differenza tra gli end member
+difT <- T2020-T2017
+cldiff <- colorRampPalette(c('blue','orange','red'))(100)
+plot(difT, col=cldiff, main= "grafico differenza tra l'anno 2020 e 2017")
+plot(coastlines, add=T)
+########################################## terzo grafico 
+# evidenziamo laghi che si sono scaldati da laghi che si sono raffreddati
+classificazione <- unsuperClass(difT, nClasses=2, clusterMap=TRUE)
+clclas <- colorRampPalette(c('red','blue'))(100)
+plot(classificazione$map,col=clclas)
+plot(coastlines, add=T) 
+## vediamo frequenze 
+freq(classificazione$map)
+  #    value     count
+  #[1,]     1    462107
+  #[2,]     2    118743
+totlake <- 462107+118743
+totlake
+  #[1] 580850
+percent1 <- 462107*100/totlake
+percent2 <- 118743*100/totlake
+percent1 
+  # [1] 79.55703
+  percent2
+  #[1] 20.44297
+data <- c("79.5", "20.5")
+plot(data, col="purple", pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali")
+## tentativo con 3 classi
+ classificazione3 <- unsuperClass(difT, nClasses=3, clusterMap=TRUE)
+ clclas3 <- colorRampPalette(c('red','green','blue'))(3)
+ plot(classificazione3$map,col=clclas3,main="Divisione in 3 classi")
+ plot(coastlines, add=T) 
+ freq(classificazione3$map)
+ #     value     count
+#[1,]     1    422352
+#[2,]     2    146581
+#[3,]     3    11917
+#[4,]    NA 932539150
+freq(classificazione3$map)
+totlake3 <- 422352 +146581 +11917
+totlake3
+#[1] 580850
+percent1 <- 422352*100/totlake
+percent1
+# [1] 72.71275
+percent2 <- 146581*100/totlake3
+percent2
+# [2] 25.2356
+percent3 <- 11917*100/totlake3
+percent3
+# [3] 2.051648
+frequenza_percentuale <- c(72.7,25.2,2.1)
+clt <- colorRampPalette(c('red', 'green', 'blue')) (3)
+pie(frequenza_percentuale, labels=frequenza_percentuale, main="Diagramma a torta", col=clt)
+classi <- c("1","2","3") 
+clGGplot <- colorRampPalette(c('blue', 'green', 'red')) (3)
+output <- data.frame(classi,frequenza_percentuale)
+attach(output)
+ggplot(output,aes(x=classi,y=frequenza_percentuale,color=clGGplot)+geom_bar(stat="identity",fill="grey") 
+plot(data, col=clt, pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali") #altro plot non in ppt
+################### grafici statistica
+ # facciamo box plot con mediane
+ BX <- stack (T2017, T2018, T2019, T2020)
+ boxplot(BX,horizontal=T,axes=T,outline=F)
+ boxplot(BX,horizontal=T,axes=T,outline=F, main ="Boxplot dei dati degli anni dal 2017 al 2020")
+ ###########################################4 grafico
+ # focus su alte latitudini   ## le coastline le posso mettere solo in un confronto tra due
+ extension <- c(-180, 180, 50 , 90)
+ lakecut<- crop(t_lake, extension)
+ plot(lakecut, col=cl, main="focus alte latitudini", zlim= c(276,290))
+ ########################################### 5 grafico
+ #confronto tra 2017 e 20 cost e alte lat
+ par(mfrow=c(2,1))
+ extension <- c(-180, 180, 50 , 90)
+ beforecut <- crop(T2017, extension)
+ nowcut <- crop(T2020, extension)
+ coastcut<- crop (coastlines, extension)
+ plot(beforecut, col= cl, main=" anno 2017")
+ plot(coastcut, add=T)
+ plot(nowcut, col= cl, main=" anno 2020")
+ plot(coastcut, add=T)
+######################################### 6 grafico
+#utilizzo di prediction
+require(raster)
+require(rgdal)
+ext <- c(-180, 180, 50, 90)
+extension <- crop(t_lake, ext)
+time <- 1:nlayers(t_lake)
+fun <- function(x) {if (is.na(x[1])){ NA } else {lm(x ~ time)$coefficients[2] }} 
+predicted.lake.2025 <- calc(fun)
+cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
+plot(predicted.lake.2025, col=cl, main= "Previsione per l'anno 2025")
+plot(coastcut, add=T)
+# prediction normalizzata
+ext <- c(-180, 180, 50, 90)
+extension <- crop(t_lake, ext)
+time <- 1:nlayers(t_lake)
+fun <- function(x) {if (is.na(x[1])){ NA } else {lm(x ~ time)$coefficients[2] }} 
+predicted.lake.2025 <- calc(extension, fun) 
+predicted.lake.2025.norm <- predicted.lake.2025*301.07/271.15
+cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
+plot(predicted.lake.2025.norm, col=cl, main="previsione normalizzata per il 2025")
+plot(coastcut, add=T)
+#######################################àà 7 grafico
 
