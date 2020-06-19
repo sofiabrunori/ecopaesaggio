@@ -3,6 +3,7 @@ library(raster)
 library(ncdf4)
 library(rgdal)
 library(RStoolbox)
+library(ggplot2)
 coastlines <- readOGR("ne_10m_coastline.shp")
 rlist=list.files(pattern=".nc", full.names=T)
 list_lake =lapply(rlist, raster)
@@ -79,11 +80,18 @@ percent3
 # [1] 72.71275
 # [2] 25.2356
 # [3] 2.051648
-data <- c(72.7,25.2,2.1)
+frequenza_percentuale <- c(72.7,25.2,2.1)
 clt <- colorRampPalette(c('red', 'green', 'blue')) (3)
-pie(data, labels=data, main="Diagramma a torta", col=clt)
-plot(data, col=clt, pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali")
-hist(data)
+pie(frequenza_percentuale, labels=frequenza_percentuale, main="Diagramma a torta", col=clt)
+classi <- c("1","2","3") 
+clGGplot <- colorRampPalette(c('blue', 'green', 'red')) (3)
+output <- data.frame(classi,frequenza_percentuale)
+attach(output)
+ggplot(output, aes(x=classi, y=frequenza_percentuale , color=clGGplot)) + geom_bar(stat="identity", fill="grey") 
+
+
+plot(data, col=clt, pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali") #altro plot
+
  
  # facciamo box plot con mediane
  BX <- stack (T2017, T2018, T2019, T2020)
@@ -101,9 +109,9 @@ hist(data)
  beforecut <- crop(T2017, extension)
  nowcut <- crop(T2020, extension)
  coastcut<- crop (coastlines, extension)
- plot(beforecut, col= cl)
+ plot(beforecut, col= cl, main=" anno 2017")
  plot(coastcut, add=T)
- plot(nowcut, col= cl)
+ plot(nowcut, col= cl, main=" anno 2020")
  plot(coastcut, add=T)
 
 #utilizzo di prediction
@@ -128,7 +136,6 @@ predicted.lake.2025.norm <- predicted.lake.2025*301.07/271.15
 cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
 plot(predicted.lake.2025.norm, col=cl, main="previsione normalizzata per il 2025")
 plot(coastcut, add=T)
-
 
 
 
