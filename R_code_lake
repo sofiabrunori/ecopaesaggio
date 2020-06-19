@@ -57,8 +57,8 @@ plot(data, col="purple", pch=8, cex=3, main="plot delle percentuali", xlab="clas
 
 ## tentativo con 3 classi
  classificazione3 <- unsuperClass(difT, nClasses=3, clusterMap=TRUE)
- clclas3 <- colorRampPalette(c('red','green','blue'))(100)
- plot(classificazione3$map,col=clclas3)
+ clclas3 <- colorRampPalette(c('red','green','blue'))(3)
+ plot(classificazione3$map,col=clclas3,main="Divisione in 3 classi")
  plot(coastlines, add=T) 
  freq(classificazione3$map)
 #     value     count
@@ -99,8 +99,8 @@ hist(data)
  par(mfrow=c(2,1))
  extension <- c(-180, 180, 50 , 90)
  beforecut <- crop(T2017, extension)
- coastcut<- crop (coastlines, extension)
  nowcut <- crop(T2020, extension)
+ coastcut<- crop (coastlines, extension)
  plot(beforecut, col= cl)
  plot(coastcut, add=T)
  plot(nowcut, col= cl)
