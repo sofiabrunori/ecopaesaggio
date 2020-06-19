@@ -72,15 +72,18 @@ totlake3
 percent1 <- 422352*100/totlake3
 percent2 <- 146581*100/totlake3
 percent3 <- 11917*100/totlake3
+
 percent1 
 percent2 
 percent3 
 # [1] 72.71275
 # [2] 25.2356
 # [3] 2.051648
-data <- c("72.7","25.2", "2.5")
-plot(data, col="purple", pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali")
-
+data <- c(72.7,25.2,2.1)
+clt <- colorRampPalette(c('red', 'green', 'blue')) (3)
+pie(data, labels=data, main="Diagramma a torta", col=clt)
+plot(data, col=clt, pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali")
+hist(data)
  
  # facciamo box plot con mediane
  BX <- stack (T2017, T2018, T2019, T2020)
@@ -91,12 +94,12 @@ plot(data, col="purple", pch=8, cex=3, main="plot delle percentuali", xlab="clas
  ## focus su alte latitudini   ## le coastline le posso mettere solo in un confronto tra due
  extension <- c(-180, 180, 50 , 90)
  lakecut<- crop(t_lake, extension)
- coastcut<- crop (coastlines, extension)
- plot(lakecut, col=cl, main="focus alte latitudini", zlim= c(275,290))
+ plot(lakecut, col=cl, main="focus alte latitudini", zlim= c(276,290))
  #confronto tra 2017 e 20 cost e alte lat
  par(mfrow=c(2,1))
  extension <- c(-180, 180, 50 , 90)
  beforecut <- crop(T2017, extension)
+ coastcut<- crop (coastlines, extension)
  nowcut <- crop(T2020, extension)
  plot(beforecut, col= cl)
  plot(coastcut, add=T)
