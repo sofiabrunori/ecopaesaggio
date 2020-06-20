@@ -9,7 +9,13 @@ rlist=list.files(pattern=".nc", full.names=T)
 list_lake =lapply(rlist, raster)
 t_lake <- stack(list_lake)
 cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
-plot(t_lake,col=cl,main="T°acque superficiali dal 2017 al 2020",zlim=c(275,305))
+plot(t_lake,col=cl,main="T°acque superficiali dal 2017 al 2020", adj=0.5, zlim=c(275,305))
+# altro metodo per importare queste 4 immagini
+list_rast=list()
+for(i in 1:length(rlist)){
+r=raster(rlist[[i]])
+list_rast[[i]]=r
+ }
 ########################primo grafico
 # contronto fra 2017 e 2020 con coastline
 # altro modo per plottare senza avere il .nc nel names così riesco a plottare la 2020 e al 2017 con le coastlines
@@ -23,7 +29,7 @@ par(mfrow=c(2,1))
 plot(T2017, col=cl, zlim= c(275,305), main="T° acque superficiali dei laghi nel 2017")
 plot(coastlines, add=T)
 plot(T2020, col=cl, zlim= c(275,305), main="T° acque superficiali dei laghi nel 2020")
-plot(coastlines, add=T)
+plot(coastlines, add=T, lwd= 0.5)
 ################################secondo grafico
 # facciamo la differenza tra gli end member
 difT <- T2020-T2017
@@ -84,7 +90,9 @@ clGGplot <- colorRampPalette(c('blue', 'green', 'red')) (3)
 output <- data.frame(classi,frequenza_percentuale)
 attach(output)
 ggplot(output,aes(x=classi,y=frequenza_percentuale,color=clGGplot)+geom_bar(stat="identity",fill="grey") 
-plot(data, col=clt, pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali") #altro plot non in ppt
+freq(classificazione3$map)
+frequenza<-c(422352,146581,11917)
+plot(frequenza,col=clt,pch=13,cex=5,lwd=2,ylim= c(0, 500000),main="plot delle frequenze",xlab="classi",ylab="frequenze") #altro plot non in ppt
 ################### grafici statistica
  # facciamo box plot con mediane
  BX <- stack (T2017, T2018, T2019, T2020)
@@ -130,6 +138,5 @@ plot(predicted.lake.2025.norm, col=cl, main="previsione normalizzata per il 2025
 plot(coastcut, add=T)
 #######################################àà 7 grafico
 
-
-
+plot(T2017, main="prova", adj=0.5)
 
