@@ -1044,7 +1044,8 @@ clGGplot <- colorRampPalette(c('blue', 'green', 'red')) (3)
 output <- data.frame(classi,frequenza_percentuale)
 attach(output)
 ggplot(output,aes(x=classi,y=frequenza_percentuale,color=clGGplot)+geom_bar(stat="identity",fill="grey") 
-plot(data, col=clt, pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali") #altro plot non in ppt
+frequenza<-c(422352,146581,11917)
+plot(frequenza,col=clt,pch=13,cex=5,lwd=2,ylim= c(0, 500000),main="plot delle frequenze",xlab="classi",ylab="frequenze") 
 ################### grafici statistica
  # facciamo box plot con mediane
  BX <- stack (T2017, T2018, T2019, T2020)
