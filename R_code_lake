@@ -91,6 +91,10 @@ output <- data.frame(classi,frequenza_percentuale)
 attach(output)
 ggplot(output,aes(x=classi,y=frequenza_percentuale,color=clGGplot)+geom_bar(stat="identity",fill="grey") 
 freq(classificazione3$map)
+ #     value     count
+#[1,]     1    422352
+#[2,]     2    146581
+#[3,]     3    11917
 frequenza<-c(422352,146581,11917)
 plot(frequenza,col=clt,pch=13,cex=5,lwd=2,ylim= c(0, 500000),main="plot delle frequenze",xlab="classi",ylab="frequenze") #altro plot non in ppt
 ################### grafici statistica
