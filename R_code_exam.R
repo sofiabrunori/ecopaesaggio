@@ -972,11 +972,11 @@ t_lake <- stack(list_lake)
 cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
 plot(t_lake,col=cl,main="T°acque superficiali dal 2017 al 2020", adj=0.5, zlim=c(275,305))
 # altro metodo per importare queste 4 immagini
-list_rast=list()
-for(i in 1:length(rlist)){
-r=raster(rlist[[i]])
-list_rast[[i]]=r
- }
+#list_rast=list()
+#for(i in 1:length(rlist)){
+#r=raster(rlist[[i]])
+#list_rast[[i]]=r
+ #}
 ########################primo grafico
 # contronto fra 2017 e 2020 con coastline
 # altro modo per plottare senza avere il .nc nel names così riesco a plottare la 2020 e al 2017 con le coastlines
@@ -999,26 +999,26 @@ plot(difT, col=cldiff, main= "grafico differenza tra l'anno 2020 e 2017")
 plot(coastlines, add=T)
 ########################################## terzo grafico 
 # evidenziamo laghi che si sono scaldati da laghi che si sono raffreddati
-classificazione <- unsuperClass(difT, nClasses=2, clusterMap=TRUE)
-clclas <- colorRampPalette(c('red','blue'))(100)
-plot(classificazione$map,col=clclas)
-plot(coastlines, add=T) 
+#classificazione <- unsuperClass(difT, nClasses=2, clusterMap=TRUE)
+#clclas <- colorRampPalette(c('red','blue'))(100)
+#plot(classificazione$map,col=clclas)
+#plot(coastlines, add=T) 
 ## vediamo frequenze 
-freq(classificazione$map)
+#freq(classificazione$map)
   #    value     count
   #[1,]     1    462107
   #[2,]     2    118743
-totlake <- 462107+118743
-totlake
+#totlake <- 462107+118743
+#totlake
   #[1] 580850
-percent1 <- 462107*100/totlake
-percent2 <- 118743*100/totlake
-percent1 
+#percent1 <- 462107*100/totlake
+#percent2 <- 118743*100/totlake
+#percent1 
   # [1] 79.55703
-  percent2
+ # percent2
   #[1] 20.44297
-data <- c("79.5", "20.5")
-plot(data, col="purple", pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali")
+#data <- c("79.5", "20.5")
+#plot(data, col="purple", pch=8, cex=3, main="plot delle percentuali", xlab="classi", ylab="percentuali")
 ## tentativo con 3 classi
  classificazione3 <- unsuperClass(difT, nClasses=3, clusterMap=TRUE)
  clclas3 <- colorRampPalette(c('red','green','blue'))(3)
@@ -1034,7 +1034,7 @@ freq(classificazione3$map)
 totlake3 <- 422352 +146581 +11917
 totlake3
 #[1] 580850
-percent1 <- 422352*100/totlake3
+percent1 <- 422352*100/totlake
 percent1
 # [1] 72.71275
 percent2 <- 146581*100/totlake3
@@ -1044,8 +1044,8 @@ percent3 <- 11917*100/totlake3
 percent3
 # [3] 2.051648
 frequenza_percentuale <- c(72.7,25.2,2.1)
-clclas3 <- colorRampPalette(c('red','green','blue'))(3)
-pie(frequenza_percentuale, labels=frequenza_percentuale, main="Diagramma a torta", col=clclas3)
+clt <- colorRampPalette(c('red', 'green', 'blue')) (3)
+pie(frequenza_percentuale, labels=frequenza_percentuale, main="Diagramma a torta", col=clt)
 classi <- c("1","2","3") 
 clGGplot <- colorRampPalette(c('blue', 'green', 'red')) (3)
 output <- data.frame(classi,frequenza_percentuale)
@@ -1057,8 +1057,7 @@ freq(classificazione3$map)
 #[2,]     2    146581
 #[3,]     3    11917
 frequenza<-c(422352,146581,11917)
-clclas3 <- colorRampPalette(c('red','green','blue'))(3)
-plot(frequenza,col=clclas3 ,pch=13,cex=5,lwd=2,ylim= c(0, 500000),main="plot delle frequenze",xlab="classi",ylab="frequenze") #altro plot non in ppt
+plot(frequenza,col=clt,pch=13,cex=5,lwd=2,ylim= c(0, 500000),main="plot delle frequenze",xlab="classi",ylab="frequenze") #altro plot non in ppt
 ################### grafici statistica
  # facciamo box plot con mediane
  BX <- stack (T2017, T2018, T2019, T2020)
@@ -1082,16 +1081,16 @@ plot(frequenza,col=clclas3 ,pch=13,cex=5,lwd=2,ylim= c(0, 500000),main="plot del
  plot(coastcut, add=T)
 ######################################### 6 grafico
 #utilizzo di prediction
-require(raster)
-require(rgdal)
-ext <- c(-180, 180, 50, 90)
-extension <- crop(t_lake, ext)
-time <- 1:nlayers(t_lake)
-fun <- function(x) {if (is.na(x[1])){ NA } else {lm(x ~ time)$coefficients[2] }} 
-predicted.lake.2025 <- calc(fun)
-cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
-plot(predicted.lake.2025, col=cl, main= "Previsione per l'anno 2025")
-plot(coastcut, add=T)
+#require(raster)
+#require(rgdal)
+#ext <- c(-180, 180, 50, 90)
+#extension <- crop(t_lake, ext)
+#time <- 1:nlayers(t_lake)
+#fun <- function(x) {if (is.na(x[1])){ NA } else {lm(x ~ time)$coefficients[2] }} 
+#predicted.lake.2025 <- calc(fun)
+#cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
+#plot(predicted.lake.2025, col=cl, main= "Previsione per l'anno 2025")
+#plot(coastcut, add=T)
 # prediction normalizzata
 ext <- c(-180, 180, 50, 90)
 extension <- crop(t_lake, ext)
@@ -1102,4 +1101,9 @@ predicted.lake.2025.norm <- predicted.lake.2025*301.07/271.15
 cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
 plot(predicted.lake.2025.norm, col=cl, main="previsione normalizzata per il 2025")
 plot(coastcut, add=T)
-####################################### 7 grafico
+#######################################7 grafico
+
+
+
+
+
