@@ -958,6 +958,7 @@ points(species[species$Occurrence == 1,], pch=16)
 ##################################################################################################################################
 ####################
 13. R_code_project
+
 setwd("C:/lab_eco/EX/")
 library(raster)
 library(ncdf4)
@@ -1033,7 +1034,7 @@ freq(classificazione3$map)
 totlake3 <- 422352 +146581 +11917
 totlake3
 #[1] 580850
-percent1 <- 422352*100/totlake
+percent1 <- 422352*100/totlake3
 percent1
 # [1] 72.71275
 percent2 <- 146581*100/totlake3
@@ -1043,8 +1044,8 @@ percent3 <- 11917*100/totlake3
 percent3
 # [3] 2.051648
 frequenza_percentuale <- c(72.7,25.2,2.1)
-clt <- colorRampPalette(c('red', 'green', 'blue')) (3)
-pie(frequenza_percentuale, labels=frequenza_percentuale, main="Diagramma a torta", col=clt)
+clclas3 <- colorRampPalette(c('red','green','blue'))(3)
+pie(frequenza_percentuale, labels=frequenza_percentuale, main="Diagramma a torta", col=clclas3)
 classi <- c("1","2","3") 
 clGGplot <- colorRampPalette(c('blue', 'green', 'red')) (3)
 output <- data.frame(classi,frequenza_percentuale)
@@ -1056,7 +1057,8 @@ freq(classificazione3$map)
 #[2,]     2    146581
 #[3,]     3    11917
 frequenza<-c(422352,146581,11917)
-plot(frequenza,col=clt,pch=13,cex=5,lwd=2,ylim= c(0, 500000),main="plot delle frequenze",xlab="classi",ylab="frequenze") #altro plot non in ppt
+clclas3 <- colorRampPalette(c('red','green','blue'))(3)
+plot(frequenza,col=clclas3 ,pch=13,cex=5,lwd=2,ylim= c(0, 500000),main="plot delle frequenze",xlab="classi",ylab="frequenze") #altro plot non in ppt
 ################### grafici statistica
  # facciamo box plot con mediane
  BX <- stack (T2017, T2018, T2019, T2020)
@@ -1101,4 +1103,3 @@ cl <- colorRampPalette(c('cyan', 'purple', 'red')) (300)
 plot(predicted.lake.2025.norm, col=cl, main="previsione normalizzata per il 2025")
 plot(coastcut, add=T)
 ####################################### 7 grafico
-
